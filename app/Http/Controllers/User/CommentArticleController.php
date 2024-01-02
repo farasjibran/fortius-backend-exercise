@@ -50,7 +50,7 @@ class CommentArticleController extends Controller
      */
     public function paginate(CommentArticlePaginationRequest $request)
     {
-        $response = CommentArticlePaginationResource::collection($this->commentArticleService->paginate($request));
+        $response = new CommentArticlePaginationResource($this->commentArticleService->paginate($request));
 
         return $this->ok($response);
     }

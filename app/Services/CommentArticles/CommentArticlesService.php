@@ -39,11 +39,7 @@ class CommentArticlesService extends Service
   {
     $commentArticleQuery = CommentArticle::query();
 
-    $user = $this->getUser();
-
-    $commentArticleQuery->where('user_id', $user->id);
-
-    return $commentArticleQuery->with('article');
+    return $commentArticleQuery->with(['article', 'user']);
   }
 
   /**

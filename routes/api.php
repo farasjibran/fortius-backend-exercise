@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\ApiAuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\User\ArticleController;
 use App\Http\Controllers\User\CommentArticleController;
 use Illuminate\Support\Facades\Route;
@@ -28,10 +29,24 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::post('/logout', [ApiAuthController::class, 'logout'])
             ->name('logout.api');
 
+        // Dashboard
+        Route::resource('dashboard', DashboardController::class);
+
         // Article
         Route::get('/article/paginate', [ArticleController::class, 'paginate'])
             ->name('article.paginate');
+        Route::get('/article/{id}', [ArticleController::class, 'getById'])
+            ->name('article.getById');
         Route::resource('article', ArticleController::class);
+
+        // This route only for users
+        Route::middleware('api.user')->group(function () {
+            // My Article
+            Route::get('/my-article/paginate', [ArticleController::class, 'paginateMyArticleData'])
+                ->name('my-article.paginate');
+            Route::get('/my-article', [ArticleController::class, 'getMyArticleData'])
+                ->name('my-article');
+        });
 
         // Comment Article
         Route::get('/comment-article/paginate', [CommentArticleController::class, 'paginate'])

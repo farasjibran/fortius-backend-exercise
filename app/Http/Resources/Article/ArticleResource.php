@@ -18,6 +18,9 @@ class ArticleResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
+            'total_comments' => $this->commentArticle->count(),
+            'author' => $this->user->name,
+            'created_at' => $this->created_at
         ];
     }
 }

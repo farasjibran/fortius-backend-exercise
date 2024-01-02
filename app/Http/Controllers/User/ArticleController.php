@@ -58,6 +58,20 @@ class ArticleController extends Controller
     }
 
     /**
+     * Display the resource
+     *
+     * @param   ArticleGetRequest  $request
+     *
+     * @return  JsonResponse
+     */
+    public function getById(string $id)
+    {
+        $response = new ArticleResource($this->articleService->getById($id));
+
+        return $this->ok($response);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param   ArticleRequest  $request
@@ -118,5 +132,33 @@ class ArticleController extends Controller
 
             return $this->articleService->delete($article);
         });
+    }
+
+    /**
+     * Display a listing of the resource of my article.
+     *
+     * @param   ArticleGetRequest  $request
+     *
+     * @return  JsonResponse
+     */
+    public function getMyArticleData(ArticleGetRequest $request)
+    {
+        $response = ArticleListResource::collection($this->articleService->getMyArticle($request));
+
+        return $this->ok($response);
+    }
+
+    /**
+     * Display a listing of the resource of my article with pagination
+     *
+     * @param   ArticlePaginationRequest  $request
+     *
+     * @return  JsonResponse
+     */
+    public function paginateMyArticleData(ArticlePaginationRequest $request)
+    {
+        $response = new ArticlePaginationResource($this->articleService->paginateMyArticle($request));
+
+        return $this->ok($response);
     }
 }

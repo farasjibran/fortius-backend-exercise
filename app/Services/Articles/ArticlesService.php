@@ -39,11 +39,7 @@ class ArticlesService extends Service
   {
     $articleQuery = Article::query();
 
-    $user = $this->getUser();
-
-    $articleQuery->where('user_id', $user->id);
-
-    return $articleQuery->with('commentArticle');
+    return $articleQuery->with(['commentArticle', 'user']);
   }
 
   /**
@@ -93,6 +89,40 @@ class ArticlesService extends Service
     }
 
     return $this->getSearchQuery($request)->paginate($perPage);
+  }
+
+  /**
+   * get my article data
+   *
+   * @param   ArticleGetRequest  $request
+   *
+   * @return  Article
+   */
+  public function getMyArticle(ArticleGetRequest $request)
+  {
+    $user = $this->getUser();
+
+    return $this->getSearchQuery($request)->where('user_id', $user->id)->get();
+  }
+
+  /**
+   * get my article data paginate
+   *
+   * @param   ArticlePaginationRequest  $request
+   *
+   * @return  Article
+   */
+  public function paginateMyArticle(ArticlePaginationRequest $request)
+  {
+    $user = $this->getUser();
+
+    $perPage = 10;
+
+    if ($request->has('per_page')) {
+      $perPage = $request->per_page;
+    }
+
+    return $this->getSearchQuery($request)->where('user_id', $user->id)->paginate($perPage);
   }
 
   /**
